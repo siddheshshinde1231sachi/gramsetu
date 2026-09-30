@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="mr" class="text-size-normal">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>GramSetu — डिजिटल ग्राम माहिती, पारदर्शकता व नागरिक सेवा मंच (सोनवाडी, नाशिक)</title>
+  <meta name="description" content="आपल्या गावाची माहिती, आपल्या हातात. गावातील विकासकामे, खर्च, शासकीय योजना, सुविधा आणि तक्रार निवारण पारदर्शक मंच.">
+  <meta name="theme-color" content="#1E3A8A">
+  <link rel="manifest" href="./manifest.json">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            civic: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+              950: '#0f172a'
+            },
+            saffron: {
+              500: '#f97316',
+              600: '#ea580c'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Leaflet Map CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="./app.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-amber-500 selection:text-slate-950 min-h-screen flex flex-col justify-between">
+
+  <!-- Root Application Container -->
+  <div id="app-root" class="min-h-screen flex flex-col justify-between">
+    <!-- Rendered dynamically by components.js -->
+    <div class="p-12 text-center text-slate-500 font-bold">
+      ग्रामसेतू मंच सुरू होत आहे...
+    </div>
+  </div>
+
+  <!-- Application Logic Modules -->
+  <script src="./data/maharashtraLocations.js"></script>
+  <script src="./data/villageData.js"></script>
+  <script src="./js/i18n.js"></script>
+  <script src="./js/state.js"></script>
+  <script src="./js/ai-assistant.js"></script>
+  <script src="./js/components.js"></script>
+
+  <script>
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then((reg) => {
+          console.log('GramSetu ServiceWorker registered:', reg.scope);
+        }).catch((err) => {
+          console.log('GramSetu ServiceWorker failed:', err);
+        });
+      });
+    }
+
+    // Subscribe State changes to re-render components automatically
+    window.appState.subscribe(() => {
+      window.components.render();
+    });
+
+    // Initial App Render
+    document.addEventListener('DOMContentLoaded', () => {
+      window.components.render();
+    });
+  </script>
+</body>
+</html>
